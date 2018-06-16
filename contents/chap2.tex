@@ -1,0 +1,103 @@
+% file: chap2.tex
+
+\chapter{一个温柔的开始}
+\label{ch:aGentleStart}
+
+\begin{lizi}
+  {\large \akai 预测木瓜是否味美:}
+  \upshape {想象一下你刚刚抵达太平洋小岛，
+你很快发现木瓜是当地饮食的一个重要组成部分。
+但是，你从来没有尝过木瓜。你想通过学习去预测你在市场上看到的木瓜是否可口。
+首先，你需要决定你的预测应该基于木瓜的什么\textbf{\gls{feature}}
+(\gls{feature2})。
+根据你以前吃水果形成的经验，你决定使用两个特征：木瓜的颜色和木瓜的柔软度。
+作为\textbf{学习者}
+(learner)的你，可以随机地抽取一些木瓜作为\textbf{训练样本} (training
+sample)， 记录下每一个木瓜的颜色和柔软度，然后试吃以判定木瓜是否美味。
+根据这些数据，你可以生成一个\textbf{预测规则} (prediction rule)。
+我们的第一步，是建立一个数学模型来刻画这样的学习问题。}
+\end{lizi}
+
+\section{一个统计学习的数学模型}
+
+\subsection{统计学习框架:}
+
+这个统计框架 (statistical learning framework)包含四部分： \textbf{输入}
+(input)、\textbf{输出} (output)、\textbf{数据生成模型} (data-generation
+model)、 以及\textbf{成效} (measure of success)。
+
+\subsubsection{学习者的输入}
+
+\begin{enumerate}
+
+\item
+  \textbf{样本空间} (domain space, or domain set, or instance space)：
+  一个任意的集合，通常表示为\(\mathcal{X}\)，它是我们想要研究的对象的集合。
+  在上面的例子中，\(\mathcal{X}\)就是所有的木瓜的集合。
+  通常\(\mathcal{X}\)中的一个\textbf{样本}
+  (sample)，通常表示为一个小写的\(x\)， 可以由一个\textbf{特征向量}
+  (feature vector)来表示，比如木瓜的颜色和柔软度。
+  如果用一个值表示颜色，一个值表示柔软度，那么\(x\)可以用一个二元数组来表示。
+  我们也称一个样本为一个\textbf{示例}
+  (instance)，\(\mathcal{X}\)为\textbf{示例空间} (instance space)。
+\item
+  \textbf{标记空间} (label space or label
+  set)：通常表示为\(\mathcal{Y}\)。
+  对于本例，\(\mathcal{Y}\)为二值集合，通常表示为\(\{0,1\}\)：1代表味美，0代表非味美。
+\item
+  \textbf{训练数据} (training data)：通常表示为
+  \[S = \left(\left(x_1,y_1\right),\ldots,\left(x_m,y_m\right)\right)\]
+  其中，\(x_i\),
+  \(i=1,\ldots,m\)，为第\(i\)个样本，\(y_i\)为对第\(i\)个样本所做的标记。
+  我们称\(\left(x_i,y_i\right)\)为第\(i\)个\textbf{样例}(example)。
+  简单地说，训练数据就是一组使按顺序排列的样例。\footnote{示例和样例的区别是什么，他们对应的英文单词分别是什么？}
+\end{enumerate}
+
+\subsubsection{学习者的输出}
+
+通过对样例的学习，学习者输出一个预测准则，\[h: \mathcal{X} \rightarrow \mathcal{Y}\]。
+我们称这个函数为一个\textbf{预测器} (predictor)，或是\textbf{假设}
+(hypothesis)，或是\textbf{分类器} (classifier)。
+这个预测器可以用来标记新样本。在本例中，预测器可以用来标记市场上的木瓜是否味美。
+根据训练数据，学习者可以构造某种学习算法来得到一个预测器。
+
+\subsubsection{数据生成模型}
+
+首先，我们假定样本来自于某个概率分布\(\mathcal{D}\)。
+在本例中，学习者对\(\mathcal{D}\)\emph{一无所知}，并且\(\mathcal{D}\)可以是任意的概率分布。
+在本例中，我们假设有一个``正确''的预测器\(f\)。
+预测器\(f\)对于学习者来说也是未知的。事实上，学习者梦寐以求的正是这个预测器。
+总的说来，\(S\)中的任意一个样例\(\left(x_i,y_i\right)\)是这样产生的：
+
+\begin{enumerate}
+
+\item
+  按照\(\mathcal{D}\)抽样产生一个样本\(x_i\)；
+\item
+  用正确的预测器来标记\(x_i\)，即\(y_i=f(x_i)\).
+\end{enumerate}
+
+\subsubsection{成效}
+
+学习者通过对训练数据的学习，生成一个预测器\(h\)后，怎么来评判这个预测器的好坏呢？
+一个顺理成章的标准是判断这个预测器犯错误的概率的大小。数学上，我们可以表示为：
+\[
+\begin{aligned}
+L_{\mathcal{D},f}(h) \overset{\underset{\mathrm{def}}{}}{=} \mathbb P_{x \sim D}\left[h(x) \neq f(x)\right] \overset{\underset{\mathrm{def}}{}}{=} \mathcal{D}\left(\left\{x:h(x) \neq f(x)\right\}\right)
+\end{aligned}
+\] 我们称\(L_{\mathcal{D},f}(h)\)为\textbf{预测错误} (error of a
+predictor 或者 error of a classifier 或者 generalization error 或者 risk
+或者 true error)。 注意\(L_{\mathcal{D},f}(h)\)中的下标
+\(\mathcal{D},f\) 表示这个预测错误的度量 (measure)
+是基于样本分布\(\mathcal{D}\)及正确的预测器\(f\)。 如果上下文的语境中
+\(\mathcal{D},f\) 很清楚的话，我们有时为简洁的缘故会省略掉下标。
+
+\subsubsection{思考和练习}
+
+\begin{enumerate}
+
+\item
+  在本例中，输入、输出、和数据生成模型分别是什么？
+\item
+  学习者所拥有的信息是什么？\footnote{简单说来，学习者所有信息就是训练数据\(S\)。在本例中，最初，学习者不知道木瓜颜色和柔软度的概率分布，也不知道具有某种颜色和某种柔软度的木瓜口味如何。学习者对木瓜的了解来源于\(S\)。}
+\end{enumerate}

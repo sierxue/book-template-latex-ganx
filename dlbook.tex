@@ -1,0 +1,377 @@
+%!TEX TS-program = xelatex
+%!TEX encoding = UTF-8 Unicode
+
+\documentclass[11pt,a4paper,oneside]{book}
+\usepackage[margin=2.5cm]{geometry}
+
+% ------------------------------------------------------------------------------
+% customize the headers with fancyhdr package
+% ------------------------------------------------------------------------------
+\usepackage{fancyhdr}
+\fancyhf{}
+\fancyhead[LE]{\leftmark}
+\fancyhead[RO]{\nouppercase{\rightmark}}
+\fancyfoot[LE,RO]{\thepage}
+\pagestyle{fancy}
+
+% ------------------------------------------------------------------------------
+% Index
+% ------------------------------------------------------------------------------
+\usepackage{makeidx}
+\makeindex
+
+% ------------------------------------------------------------------------------
+% Hyperlinks
+% ------------------------------------------------------------------------------
+\usepackage[colorlinks=true,linkcolor=blue]{hyperref}
+\usepackage[all]{hypcap}  % Be sure to call this package after loading hyperref.
+
+% ------------------------------------------------------------------------------
+% Glossaries, must be after hyperref
+% ------------------------------------------------------------------------------
+% toc: add the glossaries to the table of contents.
+% the glossaries to the table of contents.
+% sort=standard is default, the other two are 'def' and 'use'.
+\usepackage[xindy,toc,counter=section,style=listgroup]{glossaries}
+% \usepackage[nogroupskip]{glossaries-extra}
+\makeglossaries{}
+% https://tex.stackexchange.com/questions/390201/glossaries-with-cjk-characters
+% The approach, intended to sort by chinese and english, does not work
+% \newrobustcmd{\cjkname}[1]{\begin{CJK}{UTF8}{min}#1\end{CJK}}
+% \glsnoexpandfields
+% \GlsXtrLoadResources[
+%   src=dlbook-complete,% bib file
+%   sort={cn-zh}% locale
+%   dual-sort={en-GB},% locale used to sort secondary entries
+%   type=chinese,% put the primary entries in the 'japanese' glossary
+%   dual-type=english% put the dual entries in the 'english' glossary
+% ]
+
+% ------------------------------------------------------------------------------
+% load tocbibind to add contents,list of figures, list of tables and
+% bibliography into the toc
+% ------------------------------------------------------------------------------
+% \usepackage[utf8]{inputenc}
+% \usepackage[english]{babel}
+\usepackage[
+	backend=bibtex,
+	natbib,
+	style=authoryear,
+	citestyle=authoryear,
+	maxbibnames=99,
+	maxcitenames=1
+]{biblatex}
+\addbibresource{dlbook-complete.bib}
+
+% make the 'et al.' italic
+\DefineBibliographyStrings{english}{%
+    andothers = {\it et\addabbrvspace al\adddot}
+}
+
+% A workaround to fix a known bug in biblatex, see http://tex.stackexchange.com/questions/311426/bibliography-error-use-of-blxbblverbaddi-doesnt-match-its-definition-ve
+\makeatletter
+\def\blx@maxline{77}
+\makeatother
+
+% \usepackage{natbib}
+\usepackage{tocbibind}
+
+% ------------------------------------------------------------------------------
+% Needed to level up the bibliography in the toc
+% ------------------------------------------------------------------------------
+\usepackage{bookmark}
+
+\usepackage[figurename=图.]{caption}
+
+% ------------------------------------------------------------------------------
+% Needed to load images
+% ------------------------------------------------------------------------------
+\usepackage{graphicx}
+\graphicspath{{./figures/}}   % where to look for images
+
+% ------------------------------------------------------------------------------
+% for long and nice table
+% ------------------------------------------------------------------------------
+\usepackage{longtable}
+\usepackage{booktabs}
+\usepackage{ltxtable}
+
+% for compact item list
+\usepackage{paralist}
+% \usepackage{enumitem}
+\usepackage[inline]{enumitem}
+% for algorithm
+\usepackage[chapter]{algorithm}
+\usepackage{algorithmic}
+% \usepackage{algpseudocode}
+
+% \renewcommand{\thealgorithm}{\arabic{chapter}.\arabic{algorithm}} 
+
+% ------------------------------------------------------------------------------
+% Math - Warning: before cjkfonts (xeCJK) and other package loads fontspec
+% ------------------------------------------------------------------------------
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\numberwithin{equation}{chapter}
+
+% font selection for mathematics with XeLaTeX, MUST after amsfonts
+\usepackage{mathspec}
+% \setmathsfont(Digits,Latin,Greek)[Numbers={Lining,Proportional}]{Minion Pro}
+
+% There's no italic sans-serif math font by default, but it's needed in this book
+% follow: http://tex.stackexchange.com/questions/77640/bold-italic-and-sans-serif-math-symbols
+% to define a \mathsfit{} macro
+\DeclareMathAlphabet{\mathsfit}{\encodingdefault}{\sfdefault}{m}{sl}
+\SetMathAlphabet{\mathsfit}{bold}{\encodingdefault}{\sfdefault}{bx}{sl}
+
+% ------------------------------------------------------------------------------
+% Tikz
+% ------------------------------------------------------------------------------
+
+\usepackage{tikz}
+\usetikzlibrary{calc,positioning,arrows.meta,shapes.geometric,shapes.misc }
+
+% ------------------------------------------------------------------------------
+% Localization setting
+% ------------------------------------------------------------------------------
+
+% load cjkfonts package and set Noto Sans SC as the default CJK fonts:
+\usepackage[default,mdseries=Light,bfseries=Medium]{cjkfonts}
+
+\usepackage{titlesec}
+
+\titleformat{\part}[display]
+{\centering\bfseries\Huge}%
+{\Huge 第 \thepart{} 部分}%
+{12 pt}%
+{\bfseries\Huge}%
+
+\titleformat{\chapter}[display]
+  {\bfseries\huge}%
+  {\huge 第 \thechapter{} 章}%
+  {10 pt}%
+  {\bfseries\huge}%
+
+\renewcommand{\contentsname}{目录}
+\renewcommand{\indexname}{索引}
+\renewcommand{\figurename}{图}
+\renewcommand{\tablename}{表}
+
+% Redefine \emph to be both bold and italic, better in chinese document
+%\let\emph\relax
+%\DeclareTextFontCommand{\emph}{\bfseries\em} % bold and italic
+%\DeclareTextFontCommand{\emph}{\bfseries} % just bold
+
+\usepackage{indentfirst}
+
+% ------------------------------------------------------------------------------
+% Western fonts setting
+% ------------------------------------------------------------------------------
+
+% Set Roboto and Source Code Pro, which are installed with TexLive, for western
+% fonts:
+
+% \usepackage[no-math]{fontspec}
+
+\newcommand{\robotodir}[0]{fonts/}
+\newcommand{\sourcecodeprodir}[0]{fonts/}
+\newcommand{\sourceserifprodir}[0]{fonts/}
+
+\newcommand{\robotomd}[0]{Light}
+\newcommand{\robotobf}[0]{Medium}
+\newcommand{\robotoit}[0]{LightItalic}
+\newcommand{\robotobi}[0]{MediumItalic}
+\newcommand{\codepromd}[0]{Light}
+\newcommand{\codeprobf}[0]{Medium}
+\newcommand{\codeproit}[0]{LightIt}
+\newcommand{\codeprobi}[0]{MediumIt}
+\newcommand{\serifpromd}[0]{Light}
+\newcommand{\serifprobf}[0]{Semibold}
+
+\newfontfamily\Roboto{Roboto}[
+  Extension=.ttf,
+  Path=\robotodir,
+  UprightFont=*-Regular,
+  BoldFont=*-Bold,
+  ItalicFont=*-Italic,
+  BoldItalicFont=*-BoldItalic]
+
+\newfontfamily\SourceCodePro{SourceCodePro}[
+  Extension=.otf,
+  Path=\sourcecodeprodir,
+  UprightFont=*-\codepromd,
+  BoldFont=*-\codeprobf,
+  ItalicFont=*-\codeproit,
+  BoldItalicFont=*-\codeprobi]
+
+\newfontfamily\SourceSerifPro{SourceSerifPro}[
+  Extension=.otf,
+  Path=\sourceserifprodir,
+  UprightFont=*-\serifpromd,
+  BoldFont=*-\serifprobf]
+
+\newcommand{\serif}[0]{\SourceSerifPro}
+
+\newfontfamily\RobotoThin{Roboto}[
+  Extension=.ttf,
+  Path=\robotodir,
+  UprightFont=*-Thin,
+  ItalicFont=*-ThinItalic]
+
+\newfontfamily\RobotoLight{Roboto}[
+  Extension=.ttf,
+  Path=\robotodir,
+  UprightFont=*-Light,
+  ItalicFont=*-LightItalic]
+
+\newfontfamily\RobotoRegular{Roboto}[
+  Extension=.ttf,
+  Path=\robotodir,
+  UprightFont=*-Regular,
+  ItalicFont=*-Italic]
+
+\newfontfamily\RobotoMedium{Roboto}[
+  Extension=.ttf,
+  Path=\robotodir,
+  UprightFont=*-Medium,
+  ItalicFont=*-MediumItalic]
+
+\newfontfamily\RobotoBold{Roboto}[
+  Extension=.ttf,
+  Path=\robotodir,
+  UprightFont=*-Bold,
+  ItalicFont=*-BoldItalic]
+
+\newfontfamily\RobotoBlack{Roboto}[
+  Extension=.ttf,
+  Path=\robotodir,
+  UprightFont=*-Black,
+  ItalicFont=*-BlackItalic]
+  
+\setmainfont{Roboto}[
+  Extension=.ttf,
+  Path=\robotodir,
+  UprightFont=*-\robotomd,
+  BoldFont=*-\robotobf,
+  ItalicFont=*-\robotoit,
+  BoldItalicFont=*-\robotobi]
+
+\setsansfont{Roboto}[
+  Extension=.ttf,
+  Path=\robotodir,
+  UprightFont=*-\robotomd,
+  BoldFont=*-\robotobf,
+  ItalicFont=*-\robotoit,
+  BoldItalicFont=*-\robotobi]
+
+\setmonofont{SourceCodePro}[
+  Extension=.otf,
+  Path=\sourcecodeprodir,
+  UprightFont=*-\codepromd,
+  BoldFont=*-\codeprobf,
+  ItalicFont=*-\codeproit,
+  BoldItalicFont=*-\codeprobi]
+
+% ------------------------------------------------------------------------------
+% Line space
+% ------------------------------------------------------------------------------
+\usepackage{setspace}
+\onehalfspacing{}
+
+%sierxue添加
+%\usepackage{marginnote}
+
+%sierxue添加
+\newtheorem{theorem}{Theorem}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{observation}[theorem]{Observation}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{claim}[theorem]{Claim}
+\newtheorem{fact}[theorem]{Fact}
+\newtheorem{assumption}[theorem]{Assumption}
+
+%------------------------------定理名称中文化-----------------------------%
+\newtheorem{dingyi}{\textbf 定义~}[section]
+\newtheorem{dingli}{\textbf 定理~}[section]
+\newtheorem{yinli}[dingli]{\textbf 引理~}
+\newtheorem{tuilun}[dingli]{\textbf 推论~}
+\newtheorem{mingti}[dingli]{\textbf 命题~}
+\newtheorem{lizi}{{例}}%sierxue
+
+%sierxue添加自定义命令
+%\newcommand{\vocab}[1]{\emph{#1}} %vocab words
+%\newcommand{\vocabaka}[2]{\vocab{#1}(a.k.a. #2)} %vocab words with synonyms
+\newcommand{\cndot}[1]{{\ahei \CJKunderdot{#1}}}
+
+% ------------------------------------------------------------------------------
+% Load glossaries
+% ------------------------------------------------------------------------------
+\input{contents/glossaries}
+
+% ------------------------------------------------------------------------------
+% The document body
+% ------------------------------------------------------------------------------
+
+\begin{document}
+
+\input{contents/title}
+
+\frontmatter
+
+%\maketitle
+
+\tableofcontents
+%\listoffigures
+%\listoftables
+
+\pagebreak
+
+\input{contents/author}
+\input{contents/acknowledgements}
+\input{contents/notation}
+
+\mainmatter{}
+
+\input{contents/intro}
+\input{contents/chap2}
+\input{contents/part_basics}
+% \input{contents/linear_algebra}
+% \input{contents/prob}
+% \input{contents/numerical}
+% \input{contents/ml}
+% \input{contents/part_practical}
+% \input{contents/mlp}
+% \input{contents/regularization}
+% \input{contents/optimization}
+% \input{contents/convnets}
+% \input{contents/rnn}
+% \input{contents/guidelines}
+% \input{contents/applications}
+% \input{contents/part_research}
+% \input{contents/linear_factors}
+% \input{contents/autoencoders}
+% \input{contents/representation}
+% \input{contents/graphical_models}
+% \input{contents/monte_carlo}
+% \input{contents/partition}
+% \input{contents/inference}
+% \input{contents/generative_models}
+
+% \appendix
+% appendix chapters here
+
+\backmatter{}
+
+\bookmarksetup{startatroot}
+
+\printbibliography[
+	heading=bibintoc,
+	title={参考文献}
+]
+\printindex
+\printglossary[title={术语表}]
+
+\end{document}
