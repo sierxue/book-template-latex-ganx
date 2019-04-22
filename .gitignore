@@ -2,6 +2,12 @@
 auto
 /fonts/
 /*.pdf
+*.swp
+
+*.fdb_latexmk
+*.fls
+*.synctex.gz
+*.xdv
 
 *.log
 *.aux
